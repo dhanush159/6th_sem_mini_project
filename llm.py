@@ -117,7 +117,7 @@ def process_llm(article_text, url):
         if response.status_code == 200:
             image_bytes = response.content
             file_name = f"image_{i+1}.png"
-            directory="C:/Users/rohit/6th_sem_mini_project/images"
+            directory="./images"
             saved_file = save_image(image_bytes, file_name,directory)
             if saved_file:
                 image_files.append(saved_file)

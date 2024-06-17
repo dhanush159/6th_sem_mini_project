@@ -92,7 +92,7 @@ def main():
             if image_list:
                 st.markdown("<hr>", unsafe_allow_html=True)
                 st.write("Images found in the article url")
-                st.image(image_list, width=200, caption=[f"Image {i+1}" for i in range(len(list))])
+                st.image(image_list, width=200, caption=[f"Image {i+1}" for i in range(len(image_list))])
             
 
 if __name__ == "__main__":
