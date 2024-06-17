@@ -12,6 +12,11 @@ def is_valid_text(txt):
         return False
     return True
 
+def sanitize_filename(filename):
+    # Remove characters that are not allowed in Windows filenames
+    sanitized_filename = re.sub(r'[<>:"/\\|?*\x00-\x1F\x7F]', '_', filename)
+    return sanitized_filename[:255]  # Limit filename length to 255 characters
+
 def scrape(url, folder):
     resp = requests.get(url)
     if resp.status_code != 200:
@@ -48,23 +53,21 @@ def scrape(url, folder):
                     img_data = img_resp.content
                     img = Image.open(BytesIO(img_data))
                     if img.size[0] > 100 and img.size[1] > 100 and 'svg' not in img_name:
-                        formats = ['jpg', 'jpeg', 'png']
-                        for f in formats:
-                            if f in img_name:
-                                ind = img_name.index(f)
-                                img_name = img_name[:ind + len(f)]
+                        # Sanitize image filename
+                        img_name = sanitize_filename(img_name)
+
                         with open(os.path.join(folder, img_name), 'wb') as f:
                             f.write(img_data)
                             print(f"Downloaded {img_name}")
                     else:
-                        print(f"Skipped {img_name} (image is smaller than 100x100 pixels)")
+                        print(f"Skipped {img_name} (image is smaller than 100x100 pixels or is SVG)")
                 except UnidentifiedImageError:
                     print(f"Skipped {img_name} (unidentified image)")
                 except Exception as e:
                     print(f"An error occurred while processing {img_name}: {e}")
     return filtered_txt
 
-url = 'https://towardsdatascience.com/deep-reinforcement-learning-toward-integrated-and-unified-ai-823f665ed909'
+url = 'https://medium.com/@shaikhrayyan123/a-comprehensive-guide-to-understanding-bert-from-beginners-to-advanced-2379699e2b51'
 folder = './images'
 txt = scrape(url, folder)
 print('\n\n\n')

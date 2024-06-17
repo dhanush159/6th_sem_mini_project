@@ -5,8 +5,7 @@ transformers==4.31.0
 trl==0.4.7
 ipykernel
 langchain 
-langchian-community 
-huggingface
-huggingface-cli
+langchain-community
+huggingface-hub
 requests==2.32.3
 beautifulsoup4==4.12.3
