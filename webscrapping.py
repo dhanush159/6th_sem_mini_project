@@ -64,7 +64,11 @@ def scrape(url, folder):
                     print(f"An error occurred while processing {img_name}: {e}")
     return filtered_txt
 
+<<<<<<< HEAD
 url = 'https://indianexpress.com/article/india/g7-summit-live-updates-pm-narendra-modi-italy-9391861/'
+=======
+url = 'https://towardsdatascience.com/deep-reinforcement-learning-toward-integrated-and-unified-ai-823f665ed909'
+>>>>>>> dfe172ee45df731736a4e79a59efbed9c4582d47
 folder = './images'
 txt = scrape(url, folder)
 print('\n\n\n')
