@@ -1,4 +1,5 @@
 from webscrapping import scrape
+from llm import process_llm
 import streamlit as st
 from PIL import Image
 from io import BytesIO
