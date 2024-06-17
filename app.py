@@ -8,16 +8,14 @@ import os
 def scrape_website(url):
     image_list = []
     txt = scrape(url, 'images')
-    # open image folder and display all images if there are images otherwise display no image
+    # Check and load images if any
     if os.path.exists('images'):
         images = os.listdir('images')
         for img in images:
-            if img.endswith('.jpg') or img.endswith('.jpeg') or img.endswith('.png') or img.endswith('.gif'):
+            if img.endswith(('.jpg', '.jpeg', '.png', '.gif')):
                 image = Image.open(f'images/{img}')
                 image_list.append(image)
-        else:
-            image = None
-    return txt
+    return txt, image_list
 
 # Function to send data to LLM function (replace with actual LLM function)
 def process_with_llm(content):
@@ -55,12 +53,12 @@ def main():
             border-color: #6c63ff !important;
         }
         .generated-content {
-            background-color: #262730; /* Set to match the background color of the input box */
+            background-color: #262730;
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid #6c63ff; /* Optional: Add border for distinction */
-            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Optional: Add box-shadow for depth */
+            border: 1px solid #6c63ff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .generated-content img {
             border-radius: 10px;
@@ -80,31 +78,22 @@ def main():
     # Generate content and image on button click
     if st.button('Generate Content and Image'):
         if url:
-            # Scrape website for content and image
-            content = scrape_website(url)
+            # Scrape website for content and images
+            content, image_list = scrape_website(url)
 
             # Send scraped content to LLM function
-            processed_content = process_with_llm(content)
-
+            processed_content,list = process_llm(content,url)
+        
+            image_list=image_list+list
             # Display generated content
             st.markdown("<hr>", unsafe_allow_html=True)
             st.markdown(f"<div class='generated-content'>{processed_content}</div>", unsafe_allow_html=True)
-            image_list = []
-            # Display all images in images folder
-            path = './images'
-            if os.path.exists(path):
-                images = os.listdir(path)
-                for img in images:
-                    if img.endswith('.jpg') or img.endswith('.jpeg') or img.endswith('.png') or img.endswith('.gif'):
-                        image = Image.open(f'images/{img}')
-                        image_list.append(image)
-                else:
-                    image = None
-            if image_list:
-                # padding
-                st.markdown("<hr>", unsafe_allow_html=True)
-                st.image(image_list, width=200, caption='Generated Images')
 
+            if image_list:
+                st.markdown("<hr>", unsafe_allow_html=True)
+                st.write("Images found in the article url")
+                st.image(image_list, width=200, caption=[f"Image {i+1}" for i in range(len(list))])
+            
 
 if __name__ == "__main__":
     main()

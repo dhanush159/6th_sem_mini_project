@@ -33,13 +33,16 @@ def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
     return response
 
-def save_image(image_bytes, file_name):
+def save_image(image_bytes, file_name, directory):
+    # Construct the full path including the directory
+    full_path = os.path.join(directory, file_name)
+    
     try:
-        image = Image.open(io.BytesIO(image_bytes))
-        image.save(file_name)  # Save the image
-        return file_name
-    except IOError:
-        print("Cannot identify image file")
+        with open(full_path, 'wb') as f:
+            f.write(image_bytes)
+        return full_path  # Return the full path where the file is saved
+    except Exception as e:
+        print(f"Failed to save {file_name}: {e}")
         return None
 
 # Function to extract content after a specified marker
@@ -114,7 +117,8 @@ def process_llm(article_text, url):
         if response.status_code == 200:
             image_bytes = response.content
             file_name = f"image_{i+1}.png"
-            saved_file = save_image(image_bytes, file_name)
+            directory="C:/Users/rohit/6th_sem_mini_project/images"
+            saved_file = save_image(image_bytes, file_name,directory)
             if saved_file:
                 image_files.append(saved_file)
         else:
