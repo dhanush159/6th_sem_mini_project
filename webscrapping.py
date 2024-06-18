@@ -65,6 +65,7 @@ def scrape(url, folder):
                     print(f"Skipped {img_name} (unidentified image)")
                 except Exception as e:
                     print(f"An error occurred while processing {img_name}: {e}")
+    print(filtered_txt)
     return filtered_txt
 
 url = 'https://medium.com/@shaikhrayyan123/a-comprehensive-guide-to-understanding-bert-from-beginners-to-advanced-2379699e2b51'
