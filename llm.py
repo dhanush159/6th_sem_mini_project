@@ -103,12 +103,12 @@ def process_llm(article_text, url):
     final_prompt = prompt.format(article_text=article_text, url=url)
     res = llm.invoke(final_prompt)
 
-    marker_text = "LinkedIn Post:"
+    marker_text = "Post:"
     content_after_marker = extract_content_after_marker(res, marker_text)
-
-    prompt_2 = f"{content_after_marker} form a simple prompt for a text to image model to generate an image with simple imagination avoid text for this linkedin description given above, just give the prompt do not generate pictures urself"
+    print(content_after_marker)
+    prompt_2 = f"{content_after_marker} form a simple prompt for a text to image model avoid a office environment and keep it lively  to generate an image with simple imagination avoid text for this linkedin description given above, just give the prompt do not generate pictures urself"
     prompt_image = llm.invoke(prompt_2).strip()
-
+    print(prompt_image)
     image_files = []
     for i in range(3):
         seed = random.randint(0, 1000000)  # Generate a random seed
@@ -125,4 +125,4 @@ def process_llm(article_text, url):
             print(f"Failed to retrieve image. Status code: {response.status_code}")
             print(response.text)  # Print the error message if any
 
-    return res, image_files
+    return content_after_marker, image_files
