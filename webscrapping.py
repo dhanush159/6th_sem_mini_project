@@ -67,9 +67,3 @@ def scrape(url, folder):
                     print(f"An error occurred while processing {img_name}: {e}")
     print(filtered_txt)
     return filtered_txt
-
-url = 'https://medium.com/@shaikhrayyan123/a-comprehensive-guide-to-understanding-bert-from-beginners-to-advanced-2379699e2b51'
-folder = './images'
-txt = scrape(url, folder)
-print('\n\n\n')
-print(txt)
