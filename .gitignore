@@ -1,2 +1,3 @@
 mini/
 ./images
+./__pycache__
