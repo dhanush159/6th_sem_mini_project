@@ -7,7 +7,7 @@ from langchain_huggingface import HuggingFaceEndpoint
 from langchain.prompts import FewShotPromptTemplate, PromptTemplate
 
 # Set the environment variable for Hugging Face API token
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
 
 # Initialize the LLM with the specified parameters
 llm = HuggingFaceEndpoint(
@@ -96,17 +96,18 @@ def process_llm(article_text, url):
         examples=examples,
         example_prompt=example_prompt,
         prefix="Read the following article text and create a LinkedIn post description that highlights the key points and insights. The post should be engaging, professional, and encourage readers to read the full article. Include a call-to-action and relevant hashtags. Below are examples of similar posts. aslo in place of link add the url given",
-        suffix="Your Turn:\n\nArticle Text:\n\n{article_text}\n\nURL of the article: {url}",
+        suffix="Your Turn:\n\nArticle Text:\n\n{article_text}\n\nURL of the article: {url} add the url to the decription",
         input_variables=["article_text", "url"]
     )
 
     final_prompt = prompt.format(article_text=article_text, url=url)
     res = llm.invoke(final_prompt)
+    print(res)
 
     marker_text = "Post:"
-    content_after_marker = extract_content_after_marker(res, marker_text)
-    print(content_after_marker)
-    prompt_2 = f"{content_after_marker} form a simple prompt for a text to image model avoid a office environment and keep it lively  to generate an image with simple imagination avoid text for this linkedin description given above, just give the prompt do not generate pictures urself"
+    # content_after_marker = extract_content_after_marker(res, marker_text)
+    # print(content_after_marker)
+    prompt_2 = f"{res} form a simple prompt for a text to image model and keep it lively to generate an image with simple imagination  for the linkedin description given above, just give the prompt do not generate pictures urself"
     prompt_image = llm.invoke(prompt_2).strip()
     print(prompt_image)
     image_files = []
@@ -125,4 +126,4 @@ def process_llm(article_text, url):
             print(f"Failed to retrieve image. Status code: {response.status_code}")
             print(response.text)  # Print the error message if any
 
-    return content_after_marker, image_files
+    return res, image_files
